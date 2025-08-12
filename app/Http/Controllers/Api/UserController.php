@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
-use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @return AnonymousResourceCollection
      */
     public function index()
@@ -30,6 +31,7 @@ class UserController extends Controller
         $data = $request->validated();
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
+
         return response(new UserResource($user), 201);
     }
 
@@ -47,7 +49,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
-        if(isset($data['password'])){
+        if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
         }
         $user->update($data);
@@ -61,7 +63,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-
 
         return response(null, 204);
     }
